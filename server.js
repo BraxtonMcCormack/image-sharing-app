@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors'); 
+const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
 
@@ -11,10 +11,15 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + "/dist/index.html"));
 });
 
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log("listening on port " + port);
+});
+
 const storage = multer.diskStorage({
-    destinatino: '${process.env.PERSISTENT_STORAGE_DIR}',
+    destination: `${process.env.PERSISTENT_STORAGE_DIR}`,
     filename: (req, file, cb) => {
-        const fileName = '${Date.now()}${path.extname(file.originalname)}';
+        const fileName = `${Date.now()}${path.extname(file.originalname)}`;
         cb(null, fileName);
     }
 });
@@ -30,9 +35,4 @@ app.post('/image', uploadImage, (req, res) => {
         });
     }
     res.send('Error uploading file');
-});
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => { 
-    console.log("listening on port " + port); 
 });
